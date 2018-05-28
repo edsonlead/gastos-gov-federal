@@ -9,10 +9,8 @@ import numpy as np
 import csv
 import matplotlib.pyplot as plt
 
-
 url = 'http://www.portaltransparencia.gov.br/PortalComprasDiretasOEOrgaoSubordinado.asp?Ano=%i&CodigoOS=%s'
 url_code_name = 'http://www.portaltransparencia.gov.br/PortalComprasDiretasOEOrgaoSuperior.asp?Ano=2018&Pagina=%i'
-
 
 years = range(2004, 2019)
 
@@ -90,21 +88,29 @@ def get_values(code):
         
     return values
 
-
 def save_csv(codes,names):
+    csvfile = open(file_csv, 'a')
+    
+#    years = (range(2004,2019))
+    years = list(map(str, years))
+    header = ['Código','Órgão']
+    header.extend(years)
+    
+    save_values = csv.writer(csvfile, delimiter='|',
+                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    
+    save_values.writerow(header)
+    
     for c in range(len(codes)):
         values = get_values(codes[c])
         result = [codes[c],names[c]]
         result.extend(values)
-        with open(file_csv, 'a', newline='') as csvfile:
-            save_values = csv.writer(csvfile, delimiter=' ',
-                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            
-            save_values.writerow(result)
-        
+                   
+        save_values.writerow(result)
+       
 
 def main():
-    #testando url
+   #testando url
     simple_get(url)
     simple_get(url_code_name)
 
