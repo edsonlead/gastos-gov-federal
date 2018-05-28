@@ -1,23 +1,25 @@
+#!/usr/bin/env python3
 from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup as bs
+
 import requests
 import numpy as np
 import csv
 import matplotlib.pyplot as plt
 
-#fonte dos dados
+
 url = 'http://www.portaltransparencia.gov.br/PortalComprasDiretasOEOrgaoSubordinado.asp?Ano=%i&CodigoOS=%s'
 url_code_name = 'http://www.portaltransparencia.gov.br/PortalComprasDiretasOEOrgaoSuperior.asp?Ano=2018&Pagina=%i'
 
-#a lista years possui anos que terão os dados capturados (%i)
+
 years = range(2004, 2019)
-#valor que será utilizado para deixar os valores na mesma unidade
+
 file_csv = 'result.csv'
+
 codes = list()
 names = list()
-#values = list()
 
 def simple_get(url):
     try:
@@ -40,7 +42,7 @@ def is_good_response(resp):
 def log_error(e):
     print(e)
 
-#função que captura o código e o nome de cada órgão superior
+
 def get_codes_names(url_code_name):
     
     pages = [1,2]
@@ -63,12 +65,10 @@ def get_codes_names(url_code_name):
     
     return codes, names
 
-#função que captura e trata os valores dos gastos
+
 def get_values(code):
-#    print(code)
     values = list()
     for year in years:
-#        print('{} - [Processing...]'.format(year))
         url_orgao = url % (year, code)
         req = requests.get(url_orgao)
         html = bs(req.content, 'html.parser')
@@ -76,7 +76,7 @@ def get_values(code):
         value = html.find_all('td', class_='colunaValor')
         
         if not value:
-            value = '0.0'
+            value = '0,0'
             print('Verificar se o Ministério de código {} existia no ano {} .'.format(code, year))
         
         elif value is not None:
@@ -84,32 +84,33 @@ def get_values(code):
             value = (str(value))
 
         else:
-            value = '0.0'
+            value = '0,0'
 
-#        print('{} - [OK]'.format(year))
         values.append(value)
         
     return values
 
+
 def save_csv(codes,names):
     for c in range(len(codes)):
-        
-#        print('{} : [Processing...]'.format(codes[c]))
         values = get_values(codes[c])
         result = [codes[c],names[c]]
         result.extend(values)
-#        print(result)
         with open(file_csv, 'a', newline='') as csvfile:
             save_values = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
             
             save_values.writerow(result)
         
-#        print('{} : [OK]'.format(codes[c]))
 
-#testando url
-simple_get(url)
-simple_get(url_code_name)
+def main():
+    #testando url
+    simple_get(url)
+    simple_get(url_code_name)
 
-get_codes_names(url_code_name)
-save_csv(codes,names)
+    get_codes_names(url_code_name)
+    save_csv(codes,names)
+
+
+if __name__ == '__main__':
+    main()
