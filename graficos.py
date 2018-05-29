@@ -28,24 +28,24 @@ def capture_code_name_values(file_csv):
             sinplot(value_trat, code, name)
             #multplot(value_trat, code, name)
 
+def plot(value_trat, code, name):
+    plt.grid(True, linestyle="--")
+    plt.plot(years, value_trat, label=name)
+    plt.title('Gastos Destinados pelo Governo Federal (2004-2018)\n')
+    plt.xlabel('Anos')
+    plt.ylabel('Em Bilhões (R$)')
+
+
 def sinplot(value_trat, code, name):
-        plt.grid(True, linestyle="--")
-        plt.plot(years, value_trat, label=name)
-        plt.title('Gastos Destinados pelo Governo Federal (2004-2018)\n')
-        plt.xlabel('Anos')
-        plt.ylabel('Em Bilhões (R$)')
-        legend = plt.legend()
-        plt.savefig('imgs/sinplot-{}.png'.format(code))
-        plt.show()
+    plot(value_trat, code, name)
+    legend = plt.legend()
+    plt.savefig('imgs/sinplot-{}.png'.format(code))
+    plt.show()
         
 def multplot(value_trat, code, name):
-        plt.grid(True, linestyle="--")
-        plt.plot(years, value_trat, label=name)
-        plt.title('Gastos Destinados pelo Governo Federal (2004-2018)\n')
-        plt.xlabel('Anos')
-        plt.ylabel('Em Bilhões (R$)')
-        #legend = plt.legend()
-        plt.savefig('imgs/multplot.png')
+    plot(value_trat, code, name)
+    #legend = plt.legend()
+    plt.savefig('imgs/multplot.png')
 
 def main():
     capture_code_name_values('result.csv')
