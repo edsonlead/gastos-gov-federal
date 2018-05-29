@@ -23,13 +23,13 @@ Visualize o arquivo aqui: <a href="https://github.com/edsonlead/gastos-gov-feder
 Para raspar os dados do Portal da Transparência e exportá-los para um CSV:
 
 ```
-$ python gastos-gov-federal.py
+	$ python gastos-gov-federal.py
 ```
 
 Para gerar os gráficos e algumas análises a partir do arquivo CSV:
 
 ```
-    $ python graficos.py
+	$ python graficos.py
 ```
 
 ### Resultados
