@@ -20,9 +20,23 @@ Visualize o arquivo aqui: <a href="https://github.com/edsonlead/gastos-gov-feder
 
 ### Executando o Script
 
+Para raspar os dados do Portal da Transparência e exportá-los para um CSV:
+
 ```
 $ python gastos-gov-federal.py
 ```
+
+Para gerar os gráficos e algumas análises a partir do arquivo CSV:
+
+```
+    $ python graficos.py
+```
+
+### Resultados
+
+Para cada um dos 24 Órgãos Superiores existentes em 2018 foi gerado um gráfico
+
+Visualize os gráficos aqui: <a href="https://github.com/edsonlead/gastos-gov-federal/tree/master/imgs">imgs/*</a>
 
 #### Visite
 
