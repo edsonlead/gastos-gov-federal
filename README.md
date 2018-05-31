@@ -34,9 +34,9 @@ Para gerar os gráficos e algumas análises a partir do arquivo CSV:
 ```
 	$ python analise.py
     
-    ou
+	ou
     
-    $ python analise.py > analise.out
+	$ python analise.py > analise.out
 ```
 
 
