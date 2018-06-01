@@ -3,25 +3,21 @@ import csv
 import matplotlib.pyplot as plt
 
 
-def capture_code_name_values(file_csv):
-
+def get_code_name_values(file_csv):
     with open(file_csv, newline='') as csvfile:
         csvreader = csv.reader(csvfile, delimiter='|', quotechar='|')
         next(csvreader)
+
         for row in csvreader:
             value_notrat = list()
             value_trat = list()
-
-            d = dict()
-            d_yv = dict()
-
+            code_name = dict()
+            year_value = dict()
             years = range(2004, 2019)
-
             code = row[0]
             name = row[1]
             values = row[2:]
-
-            d[code] = name
+            code_name[code] = name
 
             for value in values:
                 value = value.replace('.', '').replace(',', '.')
@@ -29,82 +25,62 @@ def capture_code_name_values(file_csv):
                 value_trat.append(float(value)/1000000000)
 
             for i in range(len(value_notrat)):
-                d_yv[years[i]] = value_notrat[i]
+                year_value[years[i]] = value_notrat[i]
 
-            min_max(d_yv, d[code])
-#            sinplot(value_trat, code, d[code], years)
-            multplot(value_trat, code, d[code], years)
+            show_min_max(year_value, code_name[code])
+            single_plot(years, value_trat, code_name[code], code)
             print('++++'*10)
 
 
-def plot(value_trat, code, name, years):
-
+def single_plot(years, values, name, code):
     plt.grid(True, linestyle="--")
-    plt.plot(years, value_trat, label=name)
+    plt.plot(years, values, label=name)
     plt.title('Gastos Destinados pelo Governo Federal (2004-2018)\n')
     plt.xlabel('Anos')
     plt.ylabel('Em Bilhões (R$)')
-
-
-def sinplot(value_trat, code, name, years):
-
-    plot(value_trat, code, name, years)
     legend = plt.legend()
     plt.savefig('imgs/sinplot-{}.png'.format(code))
     plt.show()
 
 
-def multplot(value_trat, code, name, years):
-    #   esse 'code' do def plot não é utilizado aqui... rs
-    plot(value_trat, code, name, years)
-#   legend = plt.legend(bbox_to_anchor=(1.05, 1), loc=6, borderaxespad=0.)
-    plt.savefig('imgs/multplot.png')
-
-
-def toreal(value):
-
+def to_money(value):
     value = format(value, '5,.2f').replace('.', '-').replace(',', '.') \
             .replace('-', ',')
     return value
 
 
-def min_max(d_yv, name):
-
-    d_v = d_yv.values()
-
-    new = dict()
+def show_min_max(year_value, name):
+    values = year_value.values()
+    values_nozero = dict()
 
     print('Órgão Superior: {}'.format(name))
-    for key in d_yv:
-        if d_yv[key] != 0.0:
-            new[key] = d_yv[key]
 
-    for index, value in enumerate(new):
+    for key in year_value:
+        if year_value[key] != 0.0:
+            values_nozero[key] = year_value[key]
+
+    for index, value in enumerate(values_nozero):
         if index == 0:
             print('Ano inicial: {}'.format(value))
 
-    nw = new.values()
-    low = min(nw)
-    high = max(nw)
+    to_min_max = values_nozero.values()
+    low = min(to_min_max)
+    high = max(to_min_max)
 
-    for key in new:
-        if (new[key] == low):
-            money = toreal(low)
-            print('Gasto Mínimo: R$ {} em {}'.format(money, key))
+    for key in values_nozero:
+        if (values_nozero[key] == low):
+            print('Gasto Mínimo: R$ {} em {}'.format(to_money(low), key))
 
-        elif (new[key] == high):
-            money = toreal(high)
-            print('Gasto Máximo: R$ {} em {}'.format(money, key))
+        elif (values_nozero[key] == high):
+            print('Gasto Máximo: R$ {} em {}'.format(to_money(high), key))
 
         else:
             pass
 
 
 def main():
-
-    capture_code_name_values('result.csv')
+    get_code_name_values('result.csv')
 
 
 if __name__ == '__main__':
-
     main()
