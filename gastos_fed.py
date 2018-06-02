@@ -16,7 +16,7 @@ url_code_name = 'http://www.portaltransparencia.gov.br/PortalComprasDiretasO' \
 
 years = range(2004, 2019)
 
-file_csv = 'result.csv'
+file_csv = 'datas.csv'
 
 codes = list()
 names = list()
